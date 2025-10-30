@@ -1,0 +1,134 @@
+# Simple employee manager script in Python
+# Usage:
+#  - Run: python employees.py
+#  - Follow the menu to add, list, search, and compute average salary.
+#
+# Requirements: Python 3.8+
+
+from dataclasses import dataclass, asdict
+from typing import List
+import json
+import os
+
+DATA_FILE = "employees.json"
+
+@dataclass
+class Employee:
+    id: int
+    name: str
+    salary: float
+    position: str = ""
+
+def load_employees() -> List[Employee]:
+    if not os.path.exists(DATA_FILE):
+        return []
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return [Employee(**e) for e in data]
+    except (json.JSONDecodeError, TypeError):
+        # arquivo corrompido ou formato inesperado => iniciar vazio
+        return []
+
+def save_employees(employees: List[Employee]):
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump([asdict(e) for e in employees], f, ensure_ascii=False, indent=2)
+
+def next_id(employees: List[Employee]) -> int:
+    if not employees:
+        return 1
+    return max(e.id for e in employees) + 1
+
+def create_employee(employees: List[Employee]):
+    print("\n== Adicionar funcionário ==")
+    name = input("Nome: ").strip()
+    if not name:
+        print("Nome inválido. Cancelando.\n")
+        return
+    salary_str = input("Salário (ex: 3500.50): ").strip().replace(",", ".")
+    try:
+        salary = float(salary_str)
+    except ValueError:
+        print("Salário inválido. Cancelando.\n")
+        return
+    position = input("Cargo (opcional): ").strip()
+    emp = Employee(id=next_id(employees), name=name, salary=salary, position=position)
+    employees.append(emp)
+    save_employees(employees)
+    print(f"Funcionário '{emp.name}' adicionado com id {emp.id}.\n")
+
+def list_employees(employees: List[Employee]):
+    print("\n== Lista de funcionários ==")
+    if not employees:
+        print("Nenhum funcionário cadastrado.\n")
+        return
+    for e in employees:
+        print(f"ID: {e.id} | Nome: {e.name} | Salário: R$ {e.salary:.2f} | Cargo: {e.position}")
+    print("")
+
+def find_by_name(employees: List[Employee]):
+    query = input("\nDigite o nome (ou parte do nome) para buscar: ").strip().lower()
+    if not query:
+        print("Busca vazia. Cancelando.\n")
+        return
+    results = [e for e in employees if query in e.name.lower()]
+    print(f"\n== Resultados da busca por '{query}' ==")
+    if not results:
+        print("Nenhum funcionário encontrado.\n")
+        return
+    for e in results:
+        print(f"ID: {e.id} | Nome: {e.name} | Salário: R$ {e.salary:.2f} | Cargo: {e.position}")
+    print("")
+
+def average_salary(employees: List[Employee]):
+    print("\n== Média salarial ==")
+    if not employees:
+        print("Nenhum funcionário cadastrado. Média indisponível.\n")
+        return
+    avg = sum(e.salary for e in employees) / len(employees)
+    print(f"Média salarial de {len(employees)} funcionário(s): R$ {avg:.2f}\n")
+
+def remove_employee(employees: List[Employee]):
+    # função extra útil — remover por id
+    try:
+        id_str = input("\nDigite o ID do funcionário a remover: ").strip()
+        emp_id = int(id_str)
+    except ValueError:
+        print("ID inválido. Cancelando.\n")
+        return
+    for e in employees:
+        if e.id == emp_id:
+            employees.remove(e)
+            save_employees(employees)
+            print(f"Funcionário {e.name} (ID {e.id}) removido.\n")
+            return
+    print("Funcionário não encontrado.\n")
+
+def main():
+    employees = load_employees()
+    actions = {
+        "1": ("Adicionar funcionário", create_employee),
+        "2": ("Listar funcionários", list_employees),
+        "3": ("Buscar funcionário por nome", find_by_name),
+        "4": ("Calcular média salarial", average_salary),
+        "5": ("Remover funcionário por ID", remove_employee),
+        "6": ("Sair", None),
+    }
+
+    while True:
+        print("=== Gerenciador de Funcionários ===")
+        for k, (label, _) in actions.items():
+            print(f"{k}. {label}")
+        choice = input("Escolha uma opção: ").strip()
+        if choice == "6":
+            print("Saindo. Até mais!")
+            break
+        action = actions.get(choice)
+        if not action:
+            print("Opção inválida. Tente novamente.\n")
+            continue
+        _, func = action
+        func(employees)
+
+if __name__ == "__main__":
+    main()
