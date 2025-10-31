@@ -47,7 +47,7 @@ def adicionar_funcionario(funcionarios):
         
     cargo = input("Cargo (opcional): ").strip()
 
-    # Define o ID sequencialmente (tamanho da lista + 1)
+    # Define o ID 
     novo_id = len(funcionarios) + 1 
     
     novo_empregado = {
@@ -120,7 +120,6 @@ def calcular_media(funcionarios):
 
 
 def menu_principal():
-    """A função que roda o programa e mostra as opções."""
     
     # Cria uma lista de funcionários
     lista_funcionarios = carregar_dados()
