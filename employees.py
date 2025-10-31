@@ -24,7 +24,7 @@ def carregar_dados():
         return []
 
 def salvar_dados(funcionarios):
-    """Salva toda a lista no arquivo JSON."""
+    """Salva toda a lista no arquivo JSON."""   
     with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
         # Salva em formato legível com indentação
         json.dump(funcionarios, f, ensure_ascii=False, indent=4)
