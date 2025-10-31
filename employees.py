@@ -1,14 +1,12 @@
 # Gerenciador Simples de Funcionários
-# Este script cumpre as funções básicas: cadastrar, listar, buscar por nome e calcular média salarial.
-# Os dados são guardados no arquivo 'funcionarios.json' na mesma pasta.
 
 import json
 import os
 
-# O nome do arquivo onde a gente guarda os dados
+
 ARQUIVO_DADOS = "funcionarios.json"
 
-# --- Funções de Carregamento e Salvamento ---
+
 
 def carregar_dados():
     """Tenta carregar a lista de funcionários do arquivo. Se não achar ou der erro, devolve uma lista vazia."""
@@ -19,7 +17,7 @@ def carregar_dados():
             lista_dados = json.load(f)
             return lista_dados
     except Exception:
-        # Se o arquivo estiver vazio ou corrompido, começamos com uma lista vazia
+        
         print("\n[AVISO] Não consegui ler o arquivo de dados. Começando lista do zero.\n")
         return []
 
@@ -29,7 +27,7 @@ def salvar_dados(funcionarios):
         # Salva em formato legível com indentação
         json.dump(funcionarios, f, ensure_ascii=False, indent=4)
 
-# --- Funções do Menu (Requisitos do Trabalho) ---
+# --- Funções do Menu 
 
 def adicionar_funcionario(funcionarios):
     """Requisito: Adicionar funcionários a esta lista"""
@@ -72,12 +70,12 @@ def listar_funcionarios(funcionarios):
         return
     
     for f in funcionarios:
-        # Formata o salário para R$ com duas casas decimais
+        
         salario_formatado = f.get("salario", 0.00)
         
         print(f'ID: {f["id"]} | Nome: {f["nome"]} | Cargo: {f["cargo"]} | Salário: R$ {salario_formatado:.2f}')
     print("-" * 35 + "\n")
-
+# Bucas de funcionarios 
 
 def buscar_funcionario(funcionarios):
     """Requisito: Buscar funcionário por nome"""
@@ -88,7 +86,7 @@ def buscar_funcionario(funcionarios):
 
     termo = input("Digite o nome ou parte do nome para buscar: ").strip().lower()
     
-    # Filtra a lista comparando o termo com o nome, ignorando maiúsculas/minúsculas
+    # Filtra a lista 
     encontrados = [
         f for f in funcionarios if termo in f.get("nome", "").lower()
     ]
@@ -119,12 +117,12 @@ def calcular_media(funcionarios):
     print(f"A Média salarial é de: R$ {media:.2f}\n")
 
 
-# --- Função Principal (O Menu) ---
+
 
 def menu_principal():
     """A função que roda o programa e mostra as opções."""
     
-    # Carrega a lista no começo do programa (Cria uma lista de funcionários)
+    # Cria uma lista de funcionários
     lista_funcionarios = carregar_dados()
     
     while True:
