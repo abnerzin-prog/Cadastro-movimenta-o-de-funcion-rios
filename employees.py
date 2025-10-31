@@ -9,7 +9,7 @@ ARQUIVO_DADOS = "funcionarios.json"
 
 
 def carregar_dados():
-    """Tenta carregar a lista de funcionários do arquivo. Se não achar ou der erro, devolve uma lista vazia."""
+
     if not os.path.exists(ARQUIVO_DADOS):
         return []
     try:
@@ -22,7 +22,7 @@ def carregar_dados():
         return []
 
 def salvar_dados(funcionarios):
-    """Salva toda a lista no arquivo JSON."""   
+
     with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
         # Salva em formato legível com indentação
         json.dump(funcionarios, f, ensure_ascii=False, indent=4)
@@ -30,7 +30,7 @@ def salvar_dados(funcionarios):
 # --- Funções do Menu 
 
 def adicionar_funcionario(funcionarios):
-    """Requisito: Adicionar funcionários a esta lista"""
+
     print("\n--- CADASTRO DE NOVO FUNCIONÁRIO ---")
     
     nome = input("Nome completo: ").strip()
@@ -63,7 +63,7 @@ def adicionar_funcionario(funcionarios):
 
 
 def listar_funcionarios(funcionarios):
-    """Requisito: Listar funcionários"""
+
     print("\n--- LISTA GERAL DE FUNCIONÁRIOS ---")
     if not funcionarios:
         print("A lista está vazia. Adicione alguém primeiro (opção 1).")
@@ -78,7 +78,7 @@ def listar_funcionarios(funcionarios):
 # Bucas de funcionarios 
 
 def buscar_funcionario(funcionarios):
-    """Requisito: Buscar funcionário por nome"""
+
     print("\n--- BUSCA POR NOME ---")
     if not funcionarios:
         print("A lista está vazia.")
@@ -103,7 +103,7 @@ def buscar_funcionario(funcionarios):
 
 
 def calcular_media(funcionarios):
-    """Requisito: Calcular média salarial"""
+
     print("\n--- CÁLCULO DE MÉDIA SALARIAL ---")
     if not funcionarios:
         print("Não há funcionários para calcular a média.")
